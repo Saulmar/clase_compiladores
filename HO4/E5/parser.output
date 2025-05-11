@@ -1,0 +1,463 @@
+Grammar
+
+    0 $accept: programa $end
+
+    1 programa: declaraciones
+
+    2 declaraciones: declaracion
+    3              | declaraciones declaracion
+
+    4 declaracion: INT ID PUNTOYCOMA
+
+    5 $@1: ε
+
+    6 declaracion: FUNC ID PARIZQ parametros PARDER $@1 bloque
+
+    7 parametros: ε
+    8           | lista_param
+
+    9 lista_param: ID
+   10            | lista_param COMA ID
+
+   11 $@2: ε
+
+   12 bloque: LLAVEIZQ $@2 instrucciones LLAVEDER
+
+   13 instrucciones: instruccion
+   14              | instrucciones instruccion
+
+   15 instruccion: INT ID PUNTOYCOMA
+   16            | ID IGUAL ID PUNTOYCOMA
+   17            | ID PARIZQ argumentos PARDER PUNTOYCOMA
+   18            | RETURN ID PUNTOYCOMA
+   19            | bloque
+
+   20 argumentos: ε
+   21           | lista_args
+
+   22 lista_args: ID
+   23           | lista_args COMA ID
+
+
+Terminals, with rules where they appear
+
+    $end (0) 0
+    error (256)
+    ID <str> (258) 4 6 9 10 15 16 17 18 22 23
+    INT (259) 4 15
+    FUNC (260) 6
+    RETURN (261) 18
+    IGUAL (262) 16
+    PARIZQ (263) 6 17
+    PARDER (264) 6 17
+    LLAVEIZQ (265) 12
+    LLAVEDER (266) 12
+    PUNTOYCOMA (267) 4 15 16 17 18
+    COMA (268) 10 23
+
+
+Nonterminals, with rules where they appear
+
+    $accept (14)
+        on left: 0
+    programa (15)
+        on left: 1
+        on right: 0
+    declaraciones (16)
+        on left: 2 3
+        on right: 1 3
+    declaracion (17)
+        on left: 4 6
+        on right: 2 3
+    $@1 (18)
+        on left: 5
+        on right: 6
+    parametros <num> (19)
+        on left: 7 8
+        on right: 6
+    lista_param <num> (20)
+        on left: 9 10
+        on right: 8 10
+    bloque (21)
+        on left: 12
+        on right: 6 19
+    $@2 (22)
+        on left: 11
+        on right: 12
+    instrucciones (23)
+        on left: 13 14
+        on right: 12 14
+    instruccion (24)
+        on left: 15 16 17 18 19
+        on right: 13 14
+    argumentos <num> (25)
+        on left: 20 21
+        on right: 17
+    lista_args <num> (26)
+        on left: 22 23
+        on right: 21 23
+
+
+State 0
+
+    0 $accept: • programa $end
+
+    INT   shift, and go to state 1
+    FUNC  shift, and go to state 2
+
+    programa       go to state 3
+    declaraciones  go to state 4
+    declaracion    go to state 5
+
+
+State 1
+
+    4 declaracion: INT • ID PUNTOYCOMA
+
+    ID  shift, and go to state 6
+
+
+State 2
+
+    6 declaracion: FUNC • ID PARIZQ parametros PARDER $@1 bloque
+
+    ID  shift, and go to state 7
+
+
+State 3
+
+    0 $accept: programa • $end
+
+    $end  shift, and go to state 8
+
+
+State 4
+
+    1 programa: declaraciones •
+    3 declaraciones: declaraciones • declaracion
+
+    INT   shift, and go to state 1
+    FUNC  shift, and go to state 2
+
+    $default  reduce using rule 1 (programa)
+
+    declaracion  go to state 9
+
+
+State 5
+
+    2 declaraciones: declaracion •
+
+    $default  reduce using rule 2 (declaraciones)
+
+
+State 6
+
+    4 declaracion: INT ID • PUNTOYCOMA
+
+    PUNTOYCOMA  shift, and go to state 10
+
+
+State 7
+
+    6 declaracion: FUNC ID • PARIZQ parametros PARDER $@1 bloque
+
+    PARIZQ  shift, and go to state 11
+
+
+State 8
+
+    0 $accept: programa $end •
+
+    $default  accept
+
+
+State 9
+
+    3 declaraciones: declaraciones declaracion •
+
+    $default  reduce using rule 3 (declaraciones)
+
+
+State 10
+
+    4 declaracion: INT ID PUNTOYCOMA •
+
+    $default  reduce using rule 4 (declaracion)
+
+
+State 11
+
+    6 declaracion: FUNC ID PARIZQ • parametros PARDER $@1 bloque
+
+    ID  shift, and go to state 12
+
+    $default  reduce using rule 7 (parametros)
+
+    parametros   go to state 13
+    lista_param  go to state 14
+
+
+State 12
+
+    9 lista_param: ID •
+
+    $default  reduce using rule 9 (lista_param)
+
+
+State 13
+
+    6 declaracion: FUNC ID PARIZQ parametros • PARDER $@1 bloque
+
+    PARDER  shift, and go to state 15
+
+
+State 14
+
+    8 parametros: lista_param •
+   10 lista_param: lista_param • COMA ID
+
+    COMA  shift, and go to state 16
+
+    $default  reduce using rule 8 (parametros)
+
+
+State 15
+
+    6 declaracion: FUNC ID PARIZQ parametros PARDER • $@1 bloque
+
+    $default  reduce using rule 5 ($@1)
+
+    $@1  go to state 17
+
+
+State 16
+
+   10 lista_param: lista_param COMA • ID
+
+    ID  shift, and go to state 18
+
+
+State 17
+
+    6 declaracion: FUNC ID PARIZQ parametros PARDER $@1 • bloque
+
+    LLAVEIZQ  shift, and go to state 19
+
+    bloque  go to state 20
+
+
+State 18
+
+   10 lista_param: lista_param COMA ID •
+
+    $default  reduce using rule 10 (lista_param)
+
+
+State 19
+
+   12 bloque: LLAVEIZQ • $@2 instrucciones LLAVEDER
+
+    $default  reduce using rule 11 ($@2)
+
+    $@2  go to state 21
+
+
+State 20
+
+    6 declaracion: FUNC ID PARIZQ parametros PARDER $@1 bloque •
+
+    $default  reduce using rule 6 (declaracion)
+
+
+State 21
+
+   12 bloque: LLAVEIZQ $@2 • instrucciones LLAVEDER
+
+    ID        shift, and go to state 22
+    INT       shift, and go to state 23
+    RETURN    shift, and go to state 24
+    LLAVEIZQ  shift, and go to state 19
+
+    bloque         go to state 25
+    instrucciones  go to state 26
+    instruccion    go to state 27
+
+
+State 22
+
+   16 instruccion: ID • IGUAL ID PUNTOYCOMA
+   17            | ID • PARIZQ argumentos PARDER PUNTOYCOMA
+
+    IGUAL   shift, and go to state 28
+    PARIZQ  shift, and go to state 29
+
+
+State 23
+
+   15 instruccion: INT • ID PUNTOYCOMA
+
+    ID  shift, and go to state 30
+
+
+State 24
+
+   18 instruccion: RETURN • ID PUNTOYCOMA
+
+    ID  shift, and go to state 31
+
+
+State 25
+
+   19 instruccion: bloque •
+
+    $default  reduce using rule 19 (instruccion)
+
+
+State 26
+
+   12 bloque: LLAVEIZQ $@2 instrucciones • LLAVEDER
+   14 instrucciones: instrucciones • instruccion
+
+    ID        shift, and go to state 22
+    INT       shift, and go to state 23
+    RETURN    shift, and go to state 24
+    LLAVEIZQ  shift, and go to state 19
+    LLAVEDER  shift, and go to state 32
+
+    bloque       go to state 25
+    instruccion  go to state 33
+
+
+State 27
+
+   13 instrucciones: instruccion •
+
+    $default  reduce using rule 13 (instrucciones)
+
+
+State 28
+
+   16 instruccion: ID IGUAL • ID PUNTOYCOMA
+
+    ID  shift, and go to state 34
+
+
+State 29
+
+   17 instruccion: ID PARIZQ • argumentos PARDER PUNTOYCOMA
+
+    ID  shift, and go to state 35
+
+    $default  reduce using rule 20 (argumentos)
+
+    argumentos  go to state 36
+    lista_args  go to state 37
+
+
+State 30
+
+   15 instruccion: INT ID • PUNTOYCOMA
+
+    PUNTOYCOMA  shift, and go to state 38
+
+
+State 31
+
+   18 instruccion: RETURN ID • PUNTOYCOMA
+
+    PUNTOYCOMA  shift, and go to state 39
+
+
+State 32
+
+   12 bloque: LLAVEIZQ $@2 instrucciones LLAVEDER •
+
+    $default  reduce using rule 12 (bloque)
+
+
+State 33
+
+   14 instrucciones: instrucciones instruccion •
+
+    $default  reduce using rule 14 (instrucciones)
+
+
+State 34
+
+   16 instruccion: ID IGUAL ID • PUNTOYCOMA
+
+    PUNTOYCOMA  shift, and go to state 40
+
+
+State 35
+
+   22 lista_args: ID •
+
+    $default  reduce using rule 22 (lista_args)
+
+
+State 36
+
+   17 instruccion: ID PARIZQ argumentos • PARDER PUNTOYCOMA
+
+    PARDER  shift, and go to state 41
+
+
+State 37
+
+   21 argumentos: lista_args •
+   23 lista_args: lista_args • COMA ID
+
+    COMA  shift, and go to state 42
+
+    $default  reduce using rule 21 (argumentos)
+
+
+State 38
+
+   15 instruccion: INT ID PUNTOYCOMA •
+
+    $default  reduce using rule 15 (instruccion)
+
+
+State 39
+
+   18 instruccion: RETURN ID PUNTOYCOMA •
+
+    $default  reduce using rule 18 (instruccion)
+
+
+State 40
+
+   16 instruccion: ID IGUAL ID PUNTOYCOMA •
+
+    $default  reduce using rule 16 (instruccion)
+
+
+State 41
+
+   17 instruccion: ID PARIZQ argumentos PARDER • PUNTOYCOMA
+
+    PUNTOYCOMA  shift, and go to state 43
+
+
+State 42
+
+   23 lista_args: lista_args COMA • ID
+
+    ID  shift, and go to state 44
+
+
+State 43
+
+   17 instruccion: ID PARIZQ argumentos PARDER PUNTOYCOMA •
+
+    $default  reduce using rule 17 (instruccion)
+
+
+State 44
+
+   23 lista_args: lista_args COMA ID •
+
+    $default  reduce using rule 23 (lista_args)
